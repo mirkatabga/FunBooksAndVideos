@@ -1,6 +1,8 @@
+using FunBooksAndVideos.Domain.Common;
+
 namespace FunBooksAndVideos.Domain
 {
-    public class Customer
+    public class Customer : EntityBase
     {
         public Customer(
             Guid id,
@@ -12,7 +14,6 @@ namespace FunBooksAndVideos.Domain
             Id = id;
         }
 
-        public Guid Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public Guid? MembershipId { get; private set; }

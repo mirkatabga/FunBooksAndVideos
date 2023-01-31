@@ -1,7 +1,9 @@
 
+using FunBooksAndVideos.Domain.Common;
+
 namespace FunBooksAndVideos.Domain
 {
-    public class OrderItem
+    public class OrderItem : EntityBase
     {
         public OrderItem(
             Guid id,
@@ -17,7 +19,6 @@ namespace FunBooksAndVideos.Domain
             Quantity = quantity;
         }
 
-        public Guid Id { get; private set; }
         public string Name { get; private set; }
         public Guid? OrderId { get; private set; }
         public Order? Order {get; private set; }
