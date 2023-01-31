@@ -21,8 +21,12 @@ namespace FunBooksAndVideos.Domain
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
+        public Guid OrderId { get; private set; }
+        public Order Order {get; private set; }
         public Guid? MembershipId { get; private set; }
+        public Membership? Membership { get; private set; }
         public Guid? ProductId { get; private set; }
+        public Product? Product { get; private set; }
         public bool IsPhysical { get; private set; }
         public int? Quantity { get; private set; }
     }
