@@ -17,6 +17,7 @@ namespace FunBooksAndVideos.Domain
         public Guid Id { get; private set; }
         public decimal TotalPrice { get; private set; }
         public Guid CustomerId { get; private set; }
+        public Customer Customer { get; private set; }
         public string? DeliveryAddress { get; private set; }
         public ICollection<OrderItem> OrderItems { get; private set; } = new HashSet<OrderItem>();
     }
