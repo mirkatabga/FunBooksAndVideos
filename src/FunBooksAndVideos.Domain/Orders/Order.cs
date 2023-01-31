@@ -6,13 +6,11 @@ namespace FunBooksAndVideos.Domain
             Guid id,
             decimal totalPrice,
             Guid customerId,
-            ICollection<OrderItem> orderItems,
             string? deliveryAddress = null)
         {
             Id = id;
             TotalPrice = totalPrice;
             CustomerId = customerId;
-            OrderItems = orderItems;
             DeliveryAddress = deliveryAddress;
         }
 

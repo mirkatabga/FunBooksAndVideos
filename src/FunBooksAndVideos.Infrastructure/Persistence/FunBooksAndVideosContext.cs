@@ -12,8 +12,9 @@ namespace FunBooksAndVideos.Infrastructure.Persistence
 
         public DbSet<Customer>? Customers { get; set; }
         public DbSet<Product>? Products { get; set; }
-        public DbSet<Video>? Videos { get; set; }
-        public DbSet<Book>? Books { get; set; }
+        public DbSet<DigitalProduct>? DigitalProducts {get; set;}
+        public DbSet<PhysicalProduct>? PhysicalProducts {get; set;}
+        public DbSet<Membership>? Memberships { get; set; }
         public DbSet<Order>? Orders { get; set; }
     }
 }

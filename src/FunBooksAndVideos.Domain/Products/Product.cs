@@ -6,17 +6,20 @@ namespace FunBooksAndVideos.Domain
             Guid id,
             string name,
             string description,
-            decimal price)
+            decimal price,
+            ProductType productType)
         {
             Id = id;
             Name = name;
             Description = description;
             Price = price;
+            ProductType = productType;
         }
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public decimal Price { get; private set; }
+        public ProductType ProductType { get; private set; }
     }
 }
