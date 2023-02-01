@@ -1,3 +1,4 @@
+using FunBooksAndVideos.Application;
 using FunBooksAndVideos.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddInfrastructure(GetInfrastructureConfig());
+    builder.Services.AddApplication();
 }
 
 var app = builder.Build();
