@@ -18,6 +18,14 @@ namespace FunBooksAndVideos.Application.Exceptions
                 .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
         }
 
+        public ValidationException(string property, string error)
+        {
+            Errors = new Dictionary<string, string[]>
+            {
+                { property, new string[] { error } }
+            };
+        }
+
         public IDictionary<string, string[]> Errors { get; }
     }
 }

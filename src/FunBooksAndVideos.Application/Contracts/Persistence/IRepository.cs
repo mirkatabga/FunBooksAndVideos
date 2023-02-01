@@ -6,7 +6,7 @@ namespace FunBooksAndVideos.Application.Contracts.Persistence
 	{
 		Task<IReadOnlyList<T>> GetAllAsync();
 
-		Task<T?> GetByIdAsync(int id);
+		Task<T?> GetByIdAsync(Guid id);
 
 		void Add(T entity);
 

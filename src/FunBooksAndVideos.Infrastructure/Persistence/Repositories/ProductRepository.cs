@@ -1,5 +1,6 @@
 using FunBooksAndVideos.Application.Contracts.Persistence;
 using FunBooksAndVideos.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
 {
@@ -7,6 +8,20 @@ namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
     {
         public ProductRepository(FunBooksAndVideosContext dbContext) : base(dbContext)
         {
+        }
+
+        public ICollection<Product> GetByIds(IEnumerable<Guid> productIds)
+        {
+            if (productIds?.Any() == true)
+            {
+                return _dbContext.Products!
+                    .AsQueryable<Product>()
+                    .AsNoTracking()
+                    .Where(p => productIds.Contains(p.Id))
+                    .ToList();
+            }
+
+            return new List<Product>();
         }
     }
 }

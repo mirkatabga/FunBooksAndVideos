@@ -6,5 +6,10 @@ namespace FunBooksAndVideos.Application.Exceptions
             : base($"Entity \"{name}\" with key {key} was not found.")
         {
         }
+
+        public NotFoundException(string name, object[] keys)
+            : base($"\"{name}\" with keys {string.Join(',', keys)} were not found.")
+        {
+        }
     }
 }

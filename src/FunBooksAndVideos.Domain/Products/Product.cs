@@ -2,14 +2,14 @@ using FunBooksAndVideos.Domain.Common;
 
 namespace FunBooksAndVideos.Domain
 {
-    public class Product : EntityBase
+    public abstract class Product : EntityBase
     {
-        public  Product(
-            Guid id,
-            string name,
-            string description,
-            decimal price,
-            ProductType productType)
+        protected Product(
+           Guid id,
+           string name,
+           string description,
+           decimal price,
+           ProductType productType)
         {
             Id = id;
             Name = name;

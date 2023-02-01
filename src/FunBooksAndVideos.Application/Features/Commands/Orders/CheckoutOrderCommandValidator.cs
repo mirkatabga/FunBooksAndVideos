@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace FunBooksAndVideos.Application.Features.Orders.Commands
+namespace FunBooksAndVideos.Application.Features.Commands.Orders
 {
     public class CheckoutOrderCommandValidator : AbstractValidator<CheckoutOrderCommand>
     {
@@ -11,10 +11,6 @@ namespace FunBooksAndVideos.Application.Features.Orders.Commands
 
             RuleFor(p => p.OrderItems)
                 .NotEmpty();
-
-            RuleFor(p => p.TotalPrice)
-                .NotEmpty()
-                .GreaterThan(0);
         }
     }
 }
