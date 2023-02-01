@@ -1,4 +1,3 @@
-
 using FunBooksAndVideos.Domain.Common;
 
 namespace FunBooksAndVideos.Domain
