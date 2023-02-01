@@ -2,7 +2,6 @@ using FunBooksAndVideos.Application.Contracts.Persistence;
 using FunBooksAndVideos.Application.Exceptions;
 using FunBooksAndVideos.Application.Models;
 using FunBooksAndVideos.Domain;
-using FunBooksAndVideos.Domain.Common;
 
 namespace FunBooksAndVideos.Application.Features.Commands.Orders
 {
@@ -91,7 +90,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
         {
             if (productIds.Any())
             {
-                var missingIds = GetMissingEntitiesIds((ICollection<EntityBase>)products, productIds);
+                var missingIds = GetMissingEntitiesIds(products, productIds);
 
                 if (missingIds.Any())
                 {
@@ -118,9 +117,9 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                  .ToList();
         }
 
-        private static ICollection<Guid> GetMissingEntitiesIds(ICollection<EntityBase> entities, IEnumerable<Guid> ids)
+        private static ICollection<Guid> GetMissingEntitiesIds(ICollection<Product> products, IEnumerable<Guid> ids)
         {
-            if (entities.Count == ids.Count())
+            if (products.Count == ids.Count())
             {
                 return new List<Guid>();
             }
@@ -131,9 +130,9 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
 
             foreach (var id in ids)
             {
-                foreach (var entity in entities)
+                foreach (var product in products)
                 {
-                    if (id == entity.Id)
+                    if (id == product.Id)
                     {
                         isFound = true;
                         break;

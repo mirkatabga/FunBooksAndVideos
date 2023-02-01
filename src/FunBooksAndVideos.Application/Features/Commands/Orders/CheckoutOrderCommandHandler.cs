@@ -1,7 +1,4 @@
 using FunBooksAndVideos.Application.Contracts.Persistence;
-using FunBooksAndVideos.Application.Exceptions;
-using FunBooksAndVideos.Domain;
-using FunBooksAndVideos.Domain.Common;
 using MediatR;
 
 namespace FunBooksAndVideos.Application.Features.Commands.Orders
@@ -9,20 +6,19 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
     public class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderCommand, int>
     {
         private readonly IUnitOfWork _uow;
+        private readonly ICheckoutOrderCommandConsistencyValidator _consistencyValidator;
 
-        public CheckoutOrderCommandHandler(IUnitOfWork unitOfWork)
+        public CheckoutOrderCommandHandler(
+            IUnitOfWork unitOfWork,
+            ICheckoutOrderCommandConsistencyValidator consistencyValidator)
         {
             _uow = unitOfWork;
+            _consistencyValidator = consistencyValidator;
         }
 
         public async Task<int> Handle(CheckoutOrderCommand request, CancellationToken cancellationToken)
         {
-            var customer = await _uow.Customers.GetByIdAsync(request.CustomerId);
-
-            if (customer is null)
-            {
-                throw new NotFoundException(nameof(Customer), request.CustomerId);
-            }
+            await _consistencyValidator.ValidateAsync(request);
 
             return 0;
         }
