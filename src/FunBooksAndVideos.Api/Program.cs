@@ -1,5 +1,4 @@
-using Ordering.Infrastructure;
-using sFunBooksAndVideos.Infrastructure;
+using FunBooksAndVideos.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 {

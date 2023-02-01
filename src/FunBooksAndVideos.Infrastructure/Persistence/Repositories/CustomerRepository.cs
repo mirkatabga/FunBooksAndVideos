@@ -3,9 +3,9 @@ using FunBooksAndVideos.Domain;
 
 namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
 {
-    public class OrderRepository : RepositoryBase<Order>, IOrderRepository
+    public class CustomerRepository : RepositoryBase<Customer>, ICustomerRepository
     {
-        public OrderRepository(FunBooksAndVideosContext dbContext) : base(dbContext)
+        public CustomerRepository(FunBooksAndVideosContext dbContext) : base(dbContext)
         {
         }
     }

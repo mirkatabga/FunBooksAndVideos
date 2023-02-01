@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using FunBooksAndVideos.Application.Contracts.Persistence;
 using FunBooksAndVideos.Domain.Common;
-using FunBooksAndVideos.Infrastructure.Persistence;
 using System.Linq.Expressions;
 
-namespace FunBooksAndVideos.Infrastructure.Repositories
+namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
 {
     public class RepositoryBase<T> : IRepository<T> where T : EntityBase
     {
@@ -71,7 +70,7 @@ namespace FunBooksAndVideos.Infrastructure.Repositories
                 query = query.AsNoTracking();
             }
 
-            if (includes != null) 
+            if (includes != null)
             {
                 query = includes.Aggregate(query, (current, include) => current.Include(include));
             }
@@ -94,23 +93,19 @@ namespace FunBooksAndVideos.Infrastructure.Repositories
             return await _dbContext.Set<T>().FindAsync(id)!;
         }
 
-        public async Task<T> AddAsync(T entity)
+        public void Add(T entity)
         {
             _dbContext.Set<T>().Add(entity);
-            await _dbContext.SaveChangesAsync();
-            return entity;
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T entity)
+        public void Delete(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace Ordering.Infrastructure
+namespace FunBooksAndVideos.Infrastructure
 {
     public class InfrastructureConfig
     {

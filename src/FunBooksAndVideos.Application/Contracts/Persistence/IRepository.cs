@@ -8,10 +8,10 @@ namespace FunBooksAndVideos.Application.Contracts.Persistence
 
 		Task<T?> GetByIdAsync(int id);
 
-		Task<T> AddAsync(T entity);
+		void Add(T entity);
 
-		Task UpdateAsync(T entity);
+		void Update(T entity);
 
-		Task DeleteAsync(T entity);
+		void Delete(T entity);
 	}
 }
