@@ -1,3 +1,4 @@
+using FunBooksAndVideos.API.Extensions;
 using FunBooksAndVideos.Application;
 using FunBooksAndVideos.Infrastructure;
 
@@ -12,6 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 {
+    app.MigrateDatabase();
+    app.SeedDatabase();
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
