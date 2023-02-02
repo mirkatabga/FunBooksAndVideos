@@ -29,6 +29,18 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
             CheckForMissingProducts(productIds, products);
             await ValidateMembershipAsync(request, customer);
             ValidateOrderItems(request.OrderItems, products);
+            ValidateDeliveryAddress(request, products);
+        }
+
+        private static void ValidateDeliveryAddress(CheckoutOrderCommand request, ICollection<Product> products)
+        {
+            var containsPhysicalItem = products?.Any(p => p is PhysicalProduct) == true;
+
+            if (containsPhysicalItem && string.IsNullOrWhiteSpace(request.DeliveryAddress))
+            {
+                throw new ValidationException(
+                    nameof(request.DeliveryAddress), "Required when order contains physical item(s)");
+            }
         }
 
         private static void ValidateOrderItems(ICollection<OrderItemDto> orderItems, ICollection<Product> products)
@@ -51,10 +63,19 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                 {
                     var product = products.Single(p => p.Id == item.ProductId);
 
-                    if (product is PhysicalProduct physicalProduct && item.Quantity > physicalProduct.Quantity)
+                    if (product is PhysicalProduct physicalProduct)
                     {
-                        throw new ValidationException(
-                            nameof(OrderItem), $"Product with id {item.ProductId} does not have enough items to fulfill the order.");
+                        if (item.Quantity is null || item.Quantity < 1)
+                        {
+                            throw new ValidationException(nameof(OrderItem.Quantity),
+                                "Quantity should have a valid value for physical products.");
+                        }
+
+                        if (item.Quantity > physicalProduct.Quantity)
+                        {
+                            throw new ValidationException(
+                                nameof(OrderItem), $"Product with id {item.ProductId} does not have enough items to fulfill the order.");
+                        }
                     }
                 }
             }
