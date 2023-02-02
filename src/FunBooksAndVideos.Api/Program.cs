@@ -1,3 +1,4 @@
+using FunBooksAndVideos.API;
 using FunBooksAndVideos.API.Extensions;
 using FunBooksAndVideos.Application;
 using FunBooksAndVideos.Infrastructure;
@@ -22,6 +23,7 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
 
+    app.UseExceptionHandler(opt => opt.UseCustomErrors(builder.Environment));
     app.UseHttpsRedirection();
 
     app.UseAuthorization();
