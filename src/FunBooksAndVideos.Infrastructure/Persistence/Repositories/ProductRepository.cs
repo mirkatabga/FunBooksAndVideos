@@ -16,7 +16,6 @@ namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
             {
                 return _dbContext.Products!
                     .AsQueryable<Product>()
-                    .AsNoTracking()
                     .Where(p => productIds.Contains(p.Id))
                     .ToList();
             }

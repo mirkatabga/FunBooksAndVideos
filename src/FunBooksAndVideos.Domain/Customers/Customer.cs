@@ -19,5 +19,17 @@ namespace FunBooksAndVideos.Domain
         public Guid? MembershipId { get; private set; }
         public Membership? Membership { get; private set; }
         public ICollection<Product> Products { get; private set; } = new HashSet<Product>();
+
+        public void AddProducts(List<Product> productsToAdd)
+        {
+            foreach (var product in productsToAdd)
+            {
+                Products.Add(product);
+            }
+        }
+
+        public void UpdateMembership(Membership? membership) => Membership = membership;
+
+        public void UpdateProducts(ICollection<Product> products) => Products = products;
     }
 }

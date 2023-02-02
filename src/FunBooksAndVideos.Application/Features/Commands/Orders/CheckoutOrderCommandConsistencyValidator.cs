@@ -23,7 +23,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                 throw new NotFoundException(nameof(Customer), request.CustomerId);
             }
 
-            var productIds = GetProductIdsForOrder(request);
+            var productIds = request.GetProductIdsForOrder();
             var products = _uow.Products.GetByIds(productIds);
 
             CheckForMissingProducts(productIds, products);
@@ -47,6 +47,12 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
         {
             foreach (var item in orderItems)
             {
+                if(item is null)
+                {
+                    throw new ValidationException(
+                         nameof(OrderItem), "Cannot be null");
+                }
+
                 if (item.MembershipId is null && item.ProductId is null)
                 {
                     throw new ValidationException(
@@ -83,7 +89,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
 
         private async Task ValidateMembershipAsync(CheckoutOrderCommand request, Customer customer)
         {
-            var membershipIds = GetMembershipsIdsForOrder(request);
+            var membershipIds = request.GetMembershipsIdsForOrder();
 
             if (membershipIds.Any())
             {
@@ -118,24 +124,6 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                     throw new NotFoundException(nameof(products), missingIds);
                 }
             }
-        }
-
-        private static ICollection<Guid> GetMembershipsIdsForOrder(CheckoutOrderCommand request)
-        {
-            return request.OrderItems
-                .Where(item => item.MembershipId is not null)
-                .Select(item => item.MembershipId!.Value)
-                .Distinct()
-                .ToList();
-        }
-
-        private static ICollection<Guid> GetProductIdsForOrder(CheckoutOrderCommand request)
-        {
-            return request.OrderItems
-                 .Where(item => item.ProductId is not null)
-                 .Select(item => item.ProductId!.Value)
-                 .Distinct()
-                 .ToList();
         }
 
         private static ICollection<Guid> GetMissingEntitiesIds(ICollection<Product> products, IEnumerable<Guid> ids)
