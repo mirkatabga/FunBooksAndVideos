@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  funbooksandvideosdb:
+    container_name: funbooksandvideosdb
+    environment:
+        SA_PASSWORD: "abrakadabra1!"
+        ACCEPT_EULA: "Y"
+    restart: always
+    ports:
+        - "1433:1433"
+    volumes:
+      - funbooksandvideos_sqlserver_data:/var/opt/mssql
+
+  funbooksandvideos.api:
+    container_name: funbooksandvideos.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "InfrastructureConfig:PersistenceConfig:ConnectionString=Server=funbooksandvideosdb;Database=FunBooksAndVideos;User Id=sa;Password=abrakadabra1!;TrustServerCertificate=True;"
+    ports:
+      - 8000:80
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw

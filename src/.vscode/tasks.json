@@ -36,6 +36,62 @@
                 "${workspaceFolder}/FunBooksAndVideos.Api/FunBooksAndVideos.Api.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: debug",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "src:dev",
+                "target": "base",
+                "dockerfile": "${workspaceFolder}/FunBooksAndVideos.Api/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/FunBooksAndVideos.Api/FunBooksAndVideos.Api.csproj"
+            }
+        },
+        {
+            "type": "docker-build",
+            "label": "docker-build: release",
+            "dependsOn": [
+                "build"
+            ],
+            "dockerBuild": {
+                "tag": "src:latest",
+                "dockerfile": "${workspaceFolder}/FunBooksAndVideos.Api/Dockerfile",
+                "context": "${workspaceFolder}",
+                "pull": true
+            },
+            "netCore": {
+                "appProject": "${workspaceFolder}/FunBooksAndVideos.Api/FunBooksAndVideos.Api.csproj"
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: debug",
+            "dependsOn": [
+                "docker-build: debug"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/FunBooksAndVideos.Api/FunBooksAndVideos.Api.csproj",
+                "enableDebugging": true
+            }
+        },
+        {
+            "type": "docker-run",
+            "label": "docker-run: release",
+            "dependsOn": [
+                "docker-build: release"
+            ],
+            "dockerRun": {},
+            "netCore": {
+                "appProject": "${workspaceFolder}/FunBooksAndVideos.Api/FunBooksAndVideos.Api.csproj"
+            }
         }
     ]
 }

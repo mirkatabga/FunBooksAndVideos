@@ -28,7 +28,6 @@ namespace FunBooksAndVideos.API.Extensions
 
         private static async Task WriteResponse(HttpContext httpContext, bool includeDetails)
         {
-            httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
             var exceptionDetails = httpContext.Features.Get<IExceptionHandlerFeature>();
             var ex = exceptionDetails?.Error;
 
@@ -51,7 +50,7 @@ namespace FunBooksAndVideos.API.Extensions
                 {
                     const string title = "Item not found.";
                     var details = notFoundException.Message;
-                    problem = CreateProblem(StatusCodes.Status500InternalServerError, title, details);
+                    problem = CreateProblem(StatusCodes.Status400BadRequest, title, details);
 
                     httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                     await WriteToResponse(httpContext, problem);

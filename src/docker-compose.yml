@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  funbooksandvideosdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+
+  funbooksandvideos.api:
+    image: ${DOCKER_REGISTRY-}funbooksandvideosapi
+    build:
+      context: .
+      dockerfile: FunBooksAndVideos.Api/Dockerfile
+
+volumes:
+  funbooksandvideos_sqlserver_data:
