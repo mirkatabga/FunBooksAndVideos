@@ -17,6 +17,7 @@ namespace FunBooksAndVideos.Infrastructure
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IMembershipRepository, MembershipRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IShippingSlipRepository, ShippingSlipRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

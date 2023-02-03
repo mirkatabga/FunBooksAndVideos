@@ -10,11 +10,16 @@ namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
         {
         }
 
-        public override async Task<Order?> GetByIdAsync(Guid id)
+        public async Task<Order?> GetByIdAsync(Guid id, params string[] includes)
         {
-            return await _dbContext.Orders!
-                .AsQueryable()
-                .Include(o => o.OrderItems)
+            var query = _dbContext.Orders!.AsQueryable();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
     }

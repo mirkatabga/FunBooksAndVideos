@@ -16,6 +16,7 @@ namespace FunBooksAndVideos.Infrastructure.Persistence
         public DbSet<PhysicalProduct>? PhysicalProducts { get; set; }
         public DbSet<Membership>? Memberships { get; set; }
         public DbSet<Order>? Orders { get; set; }
+        public DbSet<ShippingSlip>? ShippingSlips { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -10,6 +10,7 @@ namespace FunBooksAndVideos.Infrastructure.Persistence
         private CustomerRepository? _customerRepository;
         private ProductRepository? _productRepository;
         private MembershipRepository? _membershipRepository;
+        private ShippingSlipRepository? _shippingSlipRepository;
 
         public UnitOfWork(FunBooksAndVideosContext context)
         {
@@ -27,6 +28,9 @@ namespace FunBooksAndVideos.Infrastructure.Persistence
 
         public IMembershipRepository Memberships =>
             _membershipRepository ??= new MembershipRepository(_context);
+
+        public IShippingSlipRepository ShippingSlips =>
+            _shippingSlipRepository ??= new ShippingSlipRepository(_context);
 
         public void SaveChanges()
         {

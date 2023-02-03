@@ -10,6 +10,8 @@ namespace FunBooksAndVideos.Application.Contracts.Persistence
 
         IMembershipRepository Memberships { get; }
 
+        IShippingSlipRepository ShippingSlips { get; }
+
         void SaveChanges();
     }
 }
