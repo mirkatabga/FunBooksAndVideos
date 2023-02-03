@@ -1,5 +1,6 @@
 using System.Net;
 using FunBooksAndVideos.Application.Features.Commands.Orders;
+using FunBooksAndVideos.Application.Features.Queries.Orders.GetOrderQuery;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +17,23 @@ public class OrderController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost(Name = "CheckoutOrder")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    public async Task<ActionResult<Guid>> CheckoutOrder([FromBody] CheckoutOrderCommand command)
+    [HttpGet("{id:Guid}", Name = nameof(GetOrderById))]
+    [ProducesErrorResponseType(typeof(OrderVm))]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> GetOrderById(Guid id)
+    {
+        var query = new GetOrderQuery(id);
+        var order = await _mediator.Send(query);
+
+        return Ok(order);
+    }
+
+    [HttpPost(Name = nameof(CheckoutOrder))]
+    [ProducesResponseType(typeof(Guid), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> CheckoutOrder([FromBody] CheckoutOrderCommand command)
     {
         var result = await _mediator.Send(command);
-        return Ok(result);
+        return CreatedAtAction(nameof(GetOrderById), result);
     }
 }
