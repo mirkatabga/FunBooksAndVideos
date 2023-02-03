@@ -1,4 +1,4 @@
-namespace FunBooksAndVideos.Application.Models
+namespace FunBooksAndVideos.Application.Models.Orders
 {
     public class OrderItemDto
     {

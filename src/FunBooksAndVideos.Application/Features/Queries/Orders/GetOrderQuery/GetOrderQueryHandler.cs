@@ -1,6 +1,7 @@
 using AutoMapper;
 using FunBooksAndVideos.Application.Contracts.Persistence;
 using FunBooksAndVideos.Application.Exceptions;
+using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
 using MediatR;
 

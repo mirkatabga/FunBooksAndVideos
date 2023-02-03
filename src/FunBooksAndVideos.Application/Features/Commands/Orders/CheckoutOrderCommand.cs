@@ -1,4 +1,5 @@
 using FunBooksAndVideos.Application.Models;
+using FunBooksAndVideos.Application.Models.Orders;
 using MediatR;
 
 namespace FunBooksAndVideos.Application.Features.Commands.Orders
@@ -6,7 +7,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
     public record CheckoutOrderCommand(
             Guid CustomerId,
             ICollection<OrderItemDto> OrderItems,
-            string? DeliveryAddress = null) : IRequest<Guid>
+            string? DeliveryAddress = null) : IRequest<OrderVm>
     {
         public ICollection<Guid> GetMembershipsIdsForOrder()
         {

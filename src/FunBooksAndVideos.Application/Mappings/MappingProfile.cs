@@ -1,5 +1,5 @@
 using AutoMapper;
-using FunBooksAndVideos.Application.Features.Queries.Orders.GetOrderQuery;
+using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
 
 namespace FunBooksAndVideos.Application.Mappings

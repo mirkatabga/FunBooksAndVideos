@@ -1,6 +1,7 @@
 using System.Net;
 using FunBooksAndVideos.Application.Features.Commands.Orders;
 using FunBooksAndVideos.Application.Features.Queries.Orders.GetOrderQuery;
+using FunBooksAndVideos.Application.Models.Orders;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +35,10 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> CheckoutOrder([FromBody] CheckoutOrderCommand command)
     {
         var result = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetOrderById), result);
+
+        return CreatedAtAction(
+            actionName: nameof(GetOrderById),
+            routeValues: new { id = result.Id},
+            value: result);
     }
 }

@@ -1,6 +1,6 @@
 using FunBooksAndVideos.Application.Contracts.Persistence;
 using FunBooksAndVideos.Application.Exceptions;
-using FunBooksAndVideos.Application.Models;
+using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
 
 namespace FunBooksAndVideos.Application.Features.Commands.Orders
@@ -47,7 +47,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
         {
             foreach (var item in orderItems)
             {
-                if(item is null)
+                if (item is null)
                 {
                     throw new ValidationException(
                          nameof(OrderItem), "Cannot be null");
@@ -152,6 +152,8 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                 {
                     missing.Add(id);
                 }
+
+                isFound = false;
             }
 
             return missing;

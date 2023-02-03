@@ -1,6 +1,7 @@
-namespace FunBooksAndVideos.Application.Features.Queries.Orders.GetOrderQuery
+namespace FunBooksAndVideos.Application.Models.Orders
 {
     public record OrderVm(
+        Guid Id,
         decimal TotalPrice,
         Guid CustomerId,
         string? DeliveryAddress,

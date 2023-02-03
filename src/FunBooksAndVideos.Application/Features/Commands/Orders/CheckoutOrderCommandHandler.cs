@@ -1,23 +1,28 @@
+using AutoMapper;
 using FunBooksAndVideos.Application.Contracts.Persistence;
+using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
 using MediatR;
 
 namespace FunBooksAndVideos.Application.Features.Commands.Orders
 {
-    public class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderCommand, Guid>
+    public class CheckoutOrderCommandHandler : IRequestHandler<CheckoutOrderCommand, OrderVm>
     {
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
         private readonly ICheckoutOrderCommandConsistencyValidator _consistencyValidator;
 
         public CheckoutOrderCommandHandler(
             IUnitOfWork unitOfWork,
+            IMapper mapper,
             ICheckoutOrderCommandConsistencyValidator consistencyValidator)
         {
             _uow = unitOfWork;
+            _mapper = mapper;
             _consistencyValidator = consistencyValidator;
         }
 
-        public async Task<Guid> Handle(CheckoutOrderCommand request, CancellationToken cancellationToken)
+        public async Task<OrderVm> Handle(CheckoutOrderCommand request, CancellationToken cancellationToken)
         {
             await _consistencyValidator.ValidateAsync(request);
 
@@ -34,7 +39,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
 
             _uow.SaveChanges();
 
-            return order.Id;
+            return _mapper.Map<OrderVm>(order);
         }
 
         private void UpdateCustomerPurchases(Guid customerId, ICollection<Product> products, Membership? membership)

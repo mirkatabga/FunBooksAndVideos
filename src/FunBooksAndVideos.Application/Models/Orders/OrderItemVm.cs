@@ -1,4 +1,4 @@
-namespace FunBooksAndVideos.Application.Features.Queries.Orders.GetOrderQuery
+namespace FunBooksAndVideos.Application.Models.Orders
 {
     public record OrderItemVm(
         string Name,
