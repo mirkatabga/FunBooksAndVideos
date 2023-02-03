@@ -17,11 +17,16 @@ namespace FunBooksAndVideos.Domain
             BillTo = billTo;
             ShipTo = shipTo;
         }
-        
+
         public Guid CustomerId { get; private set; }
         public Guid PurchaseOrderId { get; private set; }
         public string BillTo { get; private set; }
         public string ShipTo { get; private set; }
         public ICollection<ShippingSlipItem> ShippingSlipItems { get; private set; } = new HashSet<ShippingSlipItem>();
+
+        public void AddSlipItem(ShippingSlipItem item)
+        {
+            ShippingSlipItems.Add(item);
+        }
     }
 }

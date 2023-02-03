@@ -1,5 +1,6 @@
 using AutoMapper;
 using FunBooksAndVideos.Application.Contracts.Persistence;
+using FunBooksAndVideos.Application.Features.Events.Orders;
 using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
 using MediatR;
@@ -11,15 +12,18 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
         private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
         private readonly ICheckoutOrderCommandConsistencyValidator _consistencyValidator;
+        private readonly IPublisher _publisher;
 
         public CheckoutOrderCommandHandler(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            ICheckoutOrderCommandConsistencyValidator consistencyValidator)
+            ICheckoutOrderCommandConsistencyValidator consistencyValidator,
+            IPublisher publisher)
         {
             _uow = unitOfWork;
             _mapper = mapper;
             _consistencyValidator = consistencyValidator;
+            _publisher = publisher;
         }
 
         public async Task<OrderVm> Handle(CheckoutOrderCommand request, CancellationToken cancellationToken)
@@ -38,6 +42,11 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
             UpdateCustomerPurchases(order.CustomerId, products, membership);
 
             _uow.SaveChanges();
+
+            if(products.OfType<PhysicalProduct>().Any())
+            {
+                await _publisher.Publish(new PhysicalProductsOrderedEvent(order.Id), cancellationToken);
+            }
 
             return _mapper.Map<OrderVm>(order);
         }

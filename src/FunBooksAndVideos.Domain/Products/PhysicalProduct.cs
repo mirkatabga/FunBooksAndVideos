@@ -18,5 +18,15 @@ namespace FunBooksAndVideos.Domain
 
         public int Quantity { get; private set; }
         public string Size { get; private set; }
+
+        public void ReduceQuantity(int count)
+        {
+            if(Quantity < count)
+            {
+                throw new ArgumentException($"{nameof(count)} should be greater or equal to {nameof(Quantity)}");
+            }
+
+            Quantity -= count;
+        }
     }
 }

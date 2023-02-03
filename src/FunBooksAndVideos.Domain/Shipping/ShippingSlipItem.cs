@@ -8,12 +8,16 @@ namespace FunBooksAndVideos.Domain
             Guid id,
             string description,
             int orderedQuantity,
-            int shippedQuantity)
+            int shippedQuantity,
+            Guid productId,
+            decimal price)
         {
             Id = id;
             Description = description;
             OrderedQuantity = orderedQuantity;
             ShippedQuantity = shippedQuantity;
+            ProductId = productId;
+            Price = price;
         }
 
         public string Description { get; private set; }
@@ -21,5 +25,7 @@ namespace FunBooksAndVideos.Domain
         public int ShippedQuantity { get; private set; }
         public Guid? ShippingSlipId { get; private set; }
         public ShippingSlip? ShippingSlip { get; private set; }
+        public Guid ProductId { get; private set; }
+        public decimal Price { get; private set; }
     }
 }

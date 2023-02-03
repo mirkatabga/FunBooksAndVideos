@@ -22,7 +22,7 @@ namespace FunBooksAndVideos.Application.Features.Queries.Orders.GetOrderQuery
 
         public async Task<OrderVm> Handle(GetOrderQuery request, CancellationToken cancellationToken)
         {
-            var order = await _uow.Orders.GetByIdAsync(request.OrderId);
+            var order = await _uow.Orders.GetByIdAsync(request.OrderId, nameof(Order.OrderItems));
 
             if (order is null)
             {
