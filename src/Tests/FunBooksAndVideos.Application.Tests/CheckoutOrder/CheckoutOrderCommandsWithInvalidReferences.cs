@@ -1,103 +1,81 @@
 using System.Collections;
 using FunBooksAndVideos.Application.Contracts.Persistence;
-using FunBooksAndVideos.Application.Features.Commands.Orders;
-using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
+using Tests.FunBooksAndVideos.Application.Tests.Builders;
+using static FunBooksAndVideos.Application.Tests.Mothers.CustomersMother;
+using static FunBooksAndVideos.Application.Tests.Mothers.MembershipsMother;
+using static FunBooksAndVideos.Application.Tests.Mothers.ProductsMother;
 
 namespace FunBooksAndVideos.Application.Tests
 {
     public class CheckoutOrderCommandsWithInvalidReferences : IEnumerable<object[]>
     {
-        private readonly List<object[]> _data = new()
+        private const string SESAME_STR = "Sesame street 1";
+        private readonly CheckoutOrderCommandBuilder _commandBuilder = new();
+
+        private List<object[]> Data => new()
         {
             GetCommandOrderWithNonExistingCustomer(),
             GetCommandOrderWithNonExistingProduct(),
             GetCommandOrderWithNonExistingMembership()
         };
 
-        public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
+        public IEnumerator<object[]> GetEnumerator() => Data.GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        private static object[] GetCommandOrderWithNonExistingCustomer()
+        private object[] GetCommandOrderWithNonExistingCustomer()
         {
-            var nonExistingCustomerId = Guid.NewGuid();
-            var membership = new Membership(Guid.NewGuid(), "membership1", "desc1", 100);
-
-            var command = new CheckoutOrderCommand(
-                nonExistingCustomerId,
-                new List<OrderItemDto>
-            {
-                new OrderItemDto { Name = "test1", MembershipId = membership.Id }
-            });
+            var command = _commandBuilder
+                .ForCustomer(NonExistingCustomer)
+                .ForMembership(BookClub)
+                .Build();
 
             var uow = new Mock<IUnitOfWork>();
 
-            uow
-                .Setup(x => x.Customers)
+            uow.Setup(x => x.Customers)
                 .Returns(Mock.Of<ICustomerRepository>());
 
-            uow
-                .Setup(x => x.Memberships.GetByIdAsync(membership.Id))
-                .ReturnsAsync(membership);
+            uow.Setup(x => x.Memberships.GetByIdAsync(BookClub.Id))
+                .ReturnsAsync(BookClub);
 
             return new object[] { command, uow.Object };
         }
 
-        private static object[] GetCommandOrderWithNonExistingProduct()
+        private object[] GetCommandOrderWithNonExistingProduct()
         {
-            var nonExistingProductId = Guid.NewGuid();
-            var customerId = Guid.NewGuid();
-
-            var command = new CheckoutOrderCommand(
-                CustomerId: customerId,
-                OrderItems: new List<OrderItemDto>
-                {
-                    new OrderItemDto
-                    {
-                         Name = "test1",
-                         ProductId = nonExistingProductId,
-                         Quantity = 1
-                    }
-                },
-                DeliveryAddress: "address1");
+            var command = _commandBuilder
+                .ForCustomer(Jane)
+                .ForPhysicalProducts(SESAME_STR, NonExistingPhysicalProduct)
+                .Build();
 
             var uow = new Mock<IUnitOfWork>();
 
-            uow.Setup(x => x.Customers.GetByIdAsync(customerId))
-                .ReturnsAsync(new Customer(customerId, "John", "Doe"));
+            uow.Setup(x => x.Customers.GetByIdAsync(Jane.Id))
+                .ReturnsAsync(Jane);
 
-            uow.Setup(x => x.Products.GetByIds(new List<Guid> { nonExistingProductId }))
+            uow.Setup(x => x.Products.GetByIds(new List<Guid> { NonExistingPhysicalProduct.Id }))
                 .Returns(new List<Product>());
 
             return new object[] { command, uow.Object };
         }
 
-        private static object[] GetCommandOrderWithNonExistingMembership()
+        private object[] GetCommandOrderWithNonExistingMembership()
         {
-            var nonExistingMembershipId = Guid.NewGuid();
-            var customerId = Guid.NewGuid();
-
-            var command = new CheckoutOrderCommand(
-                CustomerId: customerId,
-                OrderItems: new List<OrderItemDto>
-                {
-                    new OrderItemDto
-                    {
-                         Name = "test1",
-                         MembershipId = nonExistingMembershipId,
-                    }
-                });
+            var command = _commandBuilder
+                .ForCustomer(John)
+                .ForMembership(NonExistingMembership)
+                .Build();
 
             var uow = new Mock<IUnitOfWork>();
 
             uow.Setup(x => x.Products.GetByIds(new List<Guid>()))
                 .Returns(new List<Product>());
 
-            uow.Setup(x => x.Customers.GetByIdAsync(customerId))
-                .ReturnsAsync(new Customer(customerId, "John", "Doe"));
+            uow.Setup(x => x.Customers.GetByIdAsync(John.Id))
+                .ReturnsAsync(John);
 
-            uow.Setup(x => x.Memberships.GetByIdAsync(nonExistingMembershipId))
+            uow.Setup(x => x.Memberships.GetByIdAsync(NonExistingMembership.Id))
                 .ReturnsAsync(null as Membership);
 
             return new object[] { command, uow.Object };
