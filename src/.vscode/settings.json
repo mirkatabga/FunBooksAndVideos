@@ -7,5 +7,6 @@
         "funbooksandvideosdb",
         "MediatR",
         "Middlewares"
-    ]
+    ],
+    "dotnet-test-explorer.testProjectPath": "**/*Tests.@(csproj|vbproj|fsproj)"
 }
