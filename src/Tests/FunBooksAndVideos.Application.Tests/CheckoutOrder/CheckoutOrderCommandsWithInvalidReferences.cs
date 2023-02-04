@@ -6,7 +6,7 @@ using FunBooksAndVideos.Domain;
 
 namespace FunBooksAndVideos.Application.Tests
 {
-    public class OrdersWithInvalidReferences : IEnumerable<object[]>
+    public class CheckoutOrderCommandsWithInvalidReferences : IEnumerable<object[]>
     {
         private readonly List<object[]> _data = new()
         {
