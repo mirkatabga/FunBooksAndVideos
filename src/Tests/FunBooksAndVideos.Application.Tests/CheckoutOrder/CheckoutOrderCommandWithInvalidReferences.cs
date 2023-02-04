@@ -10,7 +10,9 @@ namespace FunBooksAndVideos.Application.Tests
     {
         private readonly List<object[]> _data = new()
         {
-            GetCommandOrderWithNonExistingCustomer()
+            GetCommandOrderWithNonExistingCustomer(),
+            GetCommandOrderWithNonExistingProduct(),
+            GetCommandOrderWithNonExistingMembership()
         };
 
         public IEnumerator<object[]> GetEnumerator() => _data.GetEnumerator();
@@ -38,6 +40,65 @@ namespace FunBooksAndVideos.Application.Tests
             uow
                 .Setup(x => x.Memberships.GetByIdAsync(membership.Id))
                 .ReturnsAsync(membership);
+
+            return new object[] { command, uow.Object };
+        }
+
+        private static object[] GetCommandOrderWithNonExistingProduct()
+        {
+            var nonExistingProductId = Guid.NewGuid();
+            var customerId = Guid.NewGuid();
+
+            var command = new CheckoutOrderCommand(
+                CustomerId: customerId,
+                OrderItems: new List<OrderItemDto>
+                {
+                    new OrderItemDto
+                    {
+                         Name = "test1",
+                         ProductId = nonExistingProductId,
+                         Quantity = 1
+                    }
+                },
+                DeliveryAddress: "address1");
+
+            var uow = new Mock<IUnitOfWork>();
+
+            uow.Setup(x => x.Customers.GetByIdAsync(customerId))
+                .ReturnsAsync(new Customer(customerId, "John", "Doe"));
+
+            uow.Setup(x => x.Products.GetByIds(new List<Guid> { nonExistingProductId }))
+                .Returns(new List<Product>());
+
+            return new object[] { command, uow.Object };
+        }
+
+        private static object[] GetCommandOrderWithNonExistingMembership()
+        {
+            var nonExistingMembershipId = Guid.NewGuid();
+            var customerId = Guid.NewGuid();
+
+            var command = new CheckoutOrderCommand(
+                CustomerId: customerId,
+                OrderItems: new List<OrderItemDto>
+                {
+                    new OrderItemDto
+                    {
+                         Name = "test1",
+                         MembershipId = nonExistingMembershipId,
+                    }
+                });
+
+            var uow = new Mock<IUnitOfWork>();
+
+            uow.Setup(x => x.Products.GetByIds(new List<Guid>()))
+                .Returns(new List<Product>());
+
+            uow.Setup(x => x.Customers.GetByIdAsync(customerId))
+                .ReturnsAsync(new Customer(customerId, "John", "Doe"));
+
+            uow.Setup(x => x.Memberships.GetByIdAsync(nonExistingMembershipId))
+                .ReturnsAsync(null as Membership);
 
             return new object[] { command, uow.Object };
         }
