@@ -40,7 +40,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
             var order = MapOrder(request, products, membership);
             await _uow.Orders.AddAsync(order);
 
-            UpdateCustomerPurchases(order.CustomerId, products, membership);
+            await UpdateCustomerPurchasesAsync(order.CustomerId, products, membership);
 
             await _uow.SaveChangesAsync();
 
@@ -52,7 +52,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
             return _mapper.Map<OrderVm>(order);
         }
 
-        private async Task UpdateCustomerPurchases(Guid customerId, ICollection<Product> products, Membership? membership)
+        private async Task UpdateCustomerPurchasesAsync(Guid customerId, ICollection<Product> products, Membership? membership)
         {
             var customer = await _uow.Customers.GetByIdAsync(
                             customerId,
