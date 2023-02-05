@@ -17,6 +17,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "InfrastructureConfig:PersistenceConfig:ConnectionString=Server=funbooksandvideosdb;Database=FunBooksAndVideos;User Id=sa;Password=abrakadabra1!;TrustServerCertificate=True;"
+    depends_on:
+      - funbooksandvideosdb
     ports:
       - 8000:80
     volumes:
