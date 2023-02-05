@@ -65,7 +65,7 @@ public class CheckoutOrderCommandHandlerTests
 
     [Theory]
     [ClassData(typeof(InvalidCheckoutOrderCommands))]
-    public void Handle_CheckoutOrderCommandHandler_ShouldThrowValidationException(
+    public async Task Handle_CheckoutOrderCommandHandler_ShouldThrowValidationException(
             CheckoutOrderCommand command, IUnitOfWork uow)
     {
         var handler = new CheckoutOrderCommandHandler(
@@ -74,7 +74,7 @@ public class CheckoutOrderCommandHandlerTests
             new CheckoutOrderCommandConsistencyValidator(uow),
             Mock.Of<IPublisher>());
 
-        handler.Invoking(h => h.Handle(command, CancellationToken.None))
+        await handler.Invoking(h => h.Handle(command, CancellationToken.None))
             .Should()
             .ThrowExactlyAsync<Exceptions.ValidationException>();
     }

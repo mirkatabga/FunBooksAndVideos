@@ -14,5 +14,16 @@ namespace FunBooksAndVideos.Application.Tests.Mothers
             quantity: 1,
             size: "10/20/5"
         );
+
+        public static PhysicalProduct GetLOTRHardCover() => new
+        (
+            id: Guid.NewGuid(),
+            name: "The Lord of the Rings",
+            description: "By J. R. R. Tolkien",
+            price: 30,
+            ProductType.Book,
+            quantity: 40,
+            size: "12/10/10"
+        );
     }
 }

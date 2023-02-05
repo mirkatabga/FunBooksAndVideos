@@ -52,7 +52,7 @@ namespace FunBooksAndVideos.Application.Tests
 
             var command = _commandBuilder
                 .ForCustomer(jane)
-                .ForPhysicalProducts(SESAME_STR, nonExistingProduct)
+                .ForPhysicalProducts(SESAME_STR, 1, nonExistingProduct)
                 .Build();
 
             var uow = new Mock<IUnitOfWork>();

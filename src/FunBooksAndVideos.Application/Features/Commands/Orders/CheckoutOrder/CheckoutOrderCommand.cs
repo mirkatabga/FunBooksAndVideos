@@ -12,7 +12,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
         public ICollection<Guid> GetMembershipsIdsForOrder()
         {
             return OrderItems
-                .Where(item => item.MembershipId is not null)
+                .Where(item => item?.MembershipId is not null)
                 .Select(item => item.MembershipId!.Value)
                 .Distinct()
                 .ToList();
@@ -21,7 +21,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
         public ICollection<Guid> GetProductIdsForOrder()
         {
             return OrderItems
-                 .Where(item => item.ProductId is not null)
+                 .Where(item => item?.ProductId is not null)
                  .Select(item => item.ProductId!.Value)
                  .Distinct()
                  .ToList();

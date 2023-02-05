@@ -50,19 +50,19 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                 if (item is null)
                 {
                     throw new ValidationException(
-                         nameof(OrderItem), "Cannot be null");
+                         nameof(OrderItemDto), "Cannot be null");
                 }
 
                 if (item.MembershipId is null && item.ProductId is null)
                 {
                     throw new ValidationException(
-                        nameof(OrderItem), $"{nameof(item.MembershipId)} or {nameof(item.ProductId)} should have value");
+                        nameof(OrderItemDto), $"{nameof(item.MembershipId)} or {nameof(item.ProductId)} should have value");
                 }
 
                 else if (item.MembershipId is not null && item.ProductId is not null)
                 {
                     throw new ValidationException(
-                         nameof(OrderItem), $"Only one of {nameof(item.MembershipId)} and {nameof(item.ProductId)} should have value");
+                         nameof(OrderItemDto), $"Only one of {nameof(item.MembershipId)} and {nameof(item.ProductId)} should have value");
                 }
 
                 else if (item.ProductId is not null)
@@ -73,14 +73,14 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                     {
                         if (item.Quantity is null || item.Quantity < 1)
                         {
-                            throw new ValidationException(nameof(OrderItem.Quantity),
+                            throw new ValidationException(nameof(OrderItemDto.Quantity),
                                 "Quantity should have a valid value for physical products.");
                         }
 
                         if (item.Quantity > physicalProduct.Quantity)
                         {
                             throw new ValidationException(
-                                nameof(OrderItem), $"Product with id {item.ProductId} does not have enough items to fulfill the order.");
+                                nameof(OrderItemDto), $"Product with id {item.ProductId} does not have enough items to fulfill the order.");
                         }
                     }
                 }

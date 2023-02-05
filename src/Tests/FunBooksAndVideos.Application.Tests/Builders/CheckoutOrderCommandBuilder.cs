@@ -12,23 +12,13 @@ namespace Tests.FunBooksAndVideos.Application.Tests.Builders
 
         public CheckoutOrderCommandBuilder ForCustomer(Customer customer)
         {
-            if (customer is null)
-            {
-                throw new ArgumentNullException(nameof(customer));
-            }
-
             _customer = customer;
 
             return this;
         }
 
-        public CheckoutOrderCommandBuilder ForPhysicalProducts(string? deliveryAddress, params PhysicalProduct[] physicalProducts)
+        public CheckoutOrderCommandBuilder ForPhysicalProducts(string? deliveryAddress, int? quantity, params PhysicalProduct[] physicalProducts)
         {
-            if (physicalProducts.Length == 0)
-            {
-                throw new ArgumentException($"{nameof(physicalProducts)} should contain at least one element.");
-            }
-
             _deliveryAddress = deliveryAddress;
 
             foreach (var product in physicalProducts)
@@ -38,7 +28,7 @@ namespace Tests.FunBooksAndVideos.Application.Tests.Builders
                     Name = product.Name,
                     MembershipId = null,
                     ProductId = product.Id,
-                    Quantity = product.Quantity
+                    Quantity = quantity
                 });
             }
 
@@ -47,11 +37,6 @@ namespace Tests.FunBooksAndVideos.Application.Tests.Builders
 
         public CheckoutOrderCommandBuilder ForDigitalProducts(params DigitalProduct[] digitalProducts)
         {
-            if (digitalProducts.Length == 0)
-            {
-                throw new ArgumentException($"{nameof(digitalProducts)} should contain at least one element.");
-            }
-
             foreach (var product in digitalProducts)
             {
                 _orderItems.Add(new OrderItemDto
@@ -68,11 +53,6 @@ namespace Tests.FunBooksAndVideos.Application.Tests.Builders
 
         public CheckoutOrderCommandBuilder ForMembership(Membership membership)
         {
-            if (membership is null)
-            {
-                throw new ArgumentNullException(nameof(membership));
-            }
-
             _orderItems.Add(new OrderItemDto
             {
                 Name = membership.Name,
