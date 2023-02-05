@@ -9,18 +9,5 @@ namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
         public OrderRepository(FunBooksAndVideosContext dbContext) : base(dbContext)
         {
         }
-
-        public async Task<Order?> GetByIdAsync(Guid id, params string[] includes)
-        {
-            var query = _dbContext.Orders!.AsQueryable();
-
-            foreach (var include in includes)
-            {
-                query = query.Include(include);
-            }
-
-            return await query
-                .FirstOrDefaultAsync(o => o.Id == id);
-        }
     }
 }

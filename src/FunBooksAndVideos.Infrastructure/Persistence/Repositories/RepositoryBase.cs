@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using FunBooksAndVideos.Application.Contracts.Persistence;
 using FunBooksAndVideos.Domain.Common;
-using System.Linq.Expressions;
 
 namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
 {
@@ -14,98 +13,37 @@ namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public virtual async Task<T?> GetByIdAsync(Guid id, params string[] includes)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            var query = _dbContext.Set<T>().AsQueryable();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.FirstOrDefaultAsync(entity => entity.Id == id);
         }
 
-        protected async Task<IReadOnlyList<T>> GetAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await _dbContext.Set<T>().Where(predicate).ToListAsync();
-        }
-
-        protected async Task<IReadOnlyList<T>> GetAsync(
-            Expression<Func<T, bool>>? predicate = null,
-            Func<IQueryable<T>,
-            IOrderedQueryable<T>>? orderBy = null,
-            string? includeString = null,
-            bool disableTracking = true)
-        {
-            IQueryable<T> query = _dbContext.Set<T>();
-
-            if (disableTracking)
-            {
-                 query = query.AsNoTracking();
-            }
-
-            if (!string.IsNullOrWhiteSpace(includeString)) 
-            {
-                query = query.Include(includeString);
-            }
-
-            if (predicate != null) 
-            {
-                query = query.Where(predicate);
-            }
-
-            if (orderBy != null)
-            {
-                return await orderBy(query).ToListAsync();
-            }
-
-            return await query.ToListAsync();
-        }
-
-        protected async Task<IReadOnlyList<T>> GetAsync(
-            Expression<Func<T, bool>>? predicate = null,
-            Func<IQueryable<T>,
-            IOrderedQueryable<T>>? orderBy = null,
-            List<Expression<Func<T, object>>>? includes = null,
-            bool disableTracking = true)
-        {
-            IQueryable<T> query = _dbContext.Set<T>();
-
-            if (disableTracking) 
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (includes != null)
-            {
-                query = includes.Aggregate(query, (current, include) => current.Include(include));
-            }
-
-            if (predicate != null)
-            {
-                 query = query.Where(predicate);
-            }
-
-            if (orderBy != null)
-            {
-                return await orderBy(query).ToListAsync();
-            }
-
-            return await query.ToListAsync();
-        }
-
-        public virtual async Task<T?> GetByIdAsync(Guid id)
-        {
-            return await _dbContext.Set<T>().FindAsync(id)!;
-        }
-
-        public void Add(T entity)
+        public async Task AddAsync(T entity)
         {
             _dbContext.Set<T>().Add(entity);
+
+            await Task.CompletedTask;
         }
 
-        public void Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
+
+            await Task.CompletedTask;
         }
 
-        public void Delete(T entity)
+        public async Task DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
+
+            await Task.CompletedTask;
         }
     }
 }

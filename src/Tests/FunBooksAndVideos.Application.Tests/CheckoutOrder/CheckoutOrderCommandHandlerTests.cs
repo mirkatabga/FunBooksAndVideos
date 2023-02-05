@@ -65,7 +65,7 @@ public class CheckoutOrderCommandHandlerTests
 
     [Theory]
     [ClassData(typeof(InvalidCheckoutOrderCommands))]
-    public async Task Handle_CheckoutOrderCommandHandler_ShouldThrowValidationException(
+    public async Task Handle_InvalidCheckoutOrderCommand_ShouldThrowValidationException(
             CheckoutOrderCommand command, IUnitOfWork uow)
     {
         var handler = new CheckoutOrderCommandHandler(

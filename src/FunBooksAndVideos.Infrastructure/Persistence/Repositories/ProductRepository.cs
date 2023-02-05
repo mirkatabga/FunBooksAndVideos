@@ -10,14 +10,14 @@ namespace FunBooksAndVideos.Infrastructure.Persistence.Repositories
         {
         }
 
-        public ICollection<Product> GetByIds(IEnumerable<Guid> productIds)
+        public async Task<ICollection<Product>> GetByIdsAsync(IEnumerable<Guid> productIds)
         {
             if (productIds?.Any() == true)
             {
-                return _dbContext.Products!
+                return await _dbContext.Products!
                     .AsQueryable<Product>()
                     .Where(p => productIds.Contains(p.Id))
-                    .ToList();
+                    .ToListAsync();
             }
 
             return new List<Product>();

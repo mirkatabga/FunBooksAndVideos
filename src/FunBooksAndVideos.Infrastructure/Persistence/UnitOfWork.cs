@@ -6,7 +6,7 @@ namespace FunBooksAndVideos.Infrastructure.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private readonly FunBooksAndVideosContext _context;
-        private  IOrderRepository? _orderRepository;
+        private IOrderRepository? _orderRepository;
         private CustomerRepository? _customerRepository;
         private ProductRepository? _productRepository;
         private MembershipRepository? _membershipRepository;
@@ -32,9 +32,9 @@ namespace FunBooksAndVideos.Infrastructure.Persistence
         public IShippingSlipRepository ShippingSlips =>
             _shippingSlipRepository ??= new ShippingSlipRepository(_context);
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

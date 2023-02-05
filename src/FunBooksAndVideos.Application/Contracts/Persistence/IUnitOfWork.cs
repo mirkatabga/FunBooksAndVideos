@@ -12,6 +12,6 @@ namespace FunBooksAndVideos.Application.Contracts.Persistence
 
         IShippingSlipRepository ShippingSlips { get; }
 
-        void SaveChanges();
+        Task SaveChangesAsync();
     }
 }

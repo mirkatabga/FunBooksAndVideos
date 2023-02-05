@@ -24,7 +24,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
             }
 
             var productIds = request.GetProductIdsForOrder();
-            var products = _uow.Products.GetByIds(productIds);
+            var products = await _uow.Products.GetByIdsAsync(productIds);
 
             CheckForMissingProducts(productIds, products);
             await ValidateMembershipAsync(request, customer);

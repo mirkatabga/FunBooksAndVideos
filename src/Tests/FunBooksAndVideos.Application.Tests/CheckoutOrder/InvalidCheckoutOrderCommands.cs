@@ -117,8 +117,8 @@ namespace FunBooksAndVideos.Application.Tests
             uow.Setup(x => x.Customers.GetByIdAsync(john.Id))
                 .ReturnsAsync(john);
 
-            uow.Setup(x => x.Products.GetByIds(It.IsAny<IEnumerable<Guid>>()))
-                .Returns(new List<Product> { lotrHardCover });
+            uow.Setup(x => x.Products.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))
+                .ReturnsAsync(new List<Product> { lotrHardCover });
 
             uow.Setup(x => x.Memberships.GetByIdAsync(premium.Id))
                 .ReturnsAsync(premium);
@@ -141,8 +141,8 @@ namespace FunBooksAndVideos.Application.Tests
             uow.Setup(x => x.Customers.GetByIdAsync(jane.Id))
                 .ReturnsAsync(jane);
 
-            uow.Setup(x => x.Products.GetByIds(It.IsAny<IEnumerable<Guid>>()))
-                .Returns(new List<Product> { lotrHardCover });
+            uow.Setup(x => x.Products.GetByIdsAsync(It.IsAny<IEnumerable<Guid>>()))
+                .ReturnsAsync(new List<Product> { lotrHardCover });
 
             uow.Setup(x => x.Memberships)
                 .Returns(Mock.Of<IMembershipRepository>());

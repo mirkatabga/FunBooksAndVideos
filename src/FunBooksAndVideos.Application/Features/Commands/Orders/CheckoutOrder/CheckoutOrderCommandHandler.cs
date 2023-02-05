@@ -1,3 +1,4 @@
+
 using AutoMapper;
 using FunBooksAndVideos.Application.Contracts.Persistence;
 using FunBooksAndVideos.Application.Features.Events.Orders;
@@ -31,19 +32,19 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
             await _consistencyValidator.ValidateAsync(request);
 
             var productIds = request.GetProductIdsForOrder();
-            var products = _uow.Products.GetByIds(productIds);
+            var products = await _uow.Products.GetByIdsAsync(productIds);
 
             var membershipId = request.GetMembershipsIdsForOrder().SingleOrDefault();
             var membership = await _uow.Memberships.GetByIdAsync(membershipId);
 
             var order = MapOrder(request, products, membership);
-            _uow.Orders.Add(order);
+            await _uow.Orders.AddAsync(order);
 
             UpdateCustomerPurchases(order.CustomerId, products, membership);
 
-            _uow.SaveChanges();
+            await _uow.SaveChangesAsync();
 
-            if(products.OfType<PhysicalProduct>().Any())
+            if (products.OfType<PhysicalProduct>().Any())
             {
                 await _publisher.Publish(new PhysicalProductsOrderedEvent(order.Id), cancellationToken);
             }
@@ -51,9 +52,9 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
             return _mapper.Map<OrderVm>(order);
         }
 
-        private void UpdateCustomerPurchases(Guid customerId, ICollection<Product> products, Membership? membership)
+        private async Task UpdateCustomerPurchases(Guid customerId, ICollection<Product> products, Membership? membership)
         {
-            var customer = _uow.Customers.GetById(
+            var customer = await _uow.Customers.GetByIdAsync(
                             customerId,
                             nameof(Customer.Membership),
                             nameof(Customer.Products));
@@ -65,7 +66,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders
                 .ToList();
 
             customer.AddProducts(productsToAdd);
-            _uow.Customers.Update(customer);
+            await _uow.Customers.UpdateAsync(customer);
         }
 
         private static Order MapOrder(CheckoutOrderCommand request, ICollection<Product> products, Membership? membership)

@@ -60,8 +60,8 @@ namespace FunBooksAndVideos.Application.Tests
             uow.Setup(x => x.Customers.GetByIdAsync(jane.Id))
                 .ReturnsAsync(jane);
 
-            uow.Setup(x => x.Products.GetByIds(new List<Guid> { nonExistingProduct.Id }))
-                .Returns(new List<Product>());
+            uow.Setup(x => x.Products.GetByIdsAsync(new List<Guid> { nonExistingProduct.Id }))
+                .ReturnsAsync(new List<Product>());
 
             return new object[] { command, uow.Object };
         }
@@ -78,8 +78,8 @@ namespace FunBooksAndVideos.Application.Tests
 
             var uow = new Mock<IUnitOfWork>();
 
-            uow.Setup(x => x.Products.GetByIds(new List<Guid>()))
-                .Returns(new List<Product>());
+            uow.Setup(x => x.Products.GetByIdsAsync(new List<Guid>()))
+                .ReturnsAsync(new List<Product>());
 
             uow.Setup(x => x.Customers.GetByIdAsync(john.Id))
                 .ReturnsAsync(john);

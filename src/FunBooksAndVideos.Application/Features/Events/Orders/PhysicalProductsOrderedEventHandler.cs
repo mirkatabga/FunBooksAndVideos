@@ -48,12 +48,12 @@ namespace FunBooksAndVideos.Application.Features.Events.Orders
                         price: orderItem.Product.Price));
 
                     physicalProduct.ReduceQuantity(orderItem.Quantity.Value);
-                    _uow.Products.Update(physicalProduct);
+                    await _uow.Products.UpdateAsync(physicalProduct);
                 }
             }
 
-            _uow.ShippingSlips.Add(shippingSlip);
-            _uow.SaveChanges();
+            await _uow.ShippingSlips.AddAsync(shippingSlip);
+            await _uow.SaveChangesAsync();
 
              _logger.LogTrace("Shipping slip created with id: {OrderId}", shippingSlip.Id);
         }
