@@ -1,9 +1,19 @@
-# FunBooksAndVideos
-FunBooksAndVideos is an e-commerce shop where customers can view books and watch online videos. Users 
+# Table of content
+
+- [Description](#funbooksandvideos)
+  * [Requirements](#requirements)
+    + [Business requirements](#business-requirements)
+    + [Tasks](#tasks)
+  * [How to start](#how-to-start)
+  * [Testing](#testing)
+
+# Description
+**FunBooksAndVideos** is an e-commerce shop where customers can view books and watch online videos. Users 
 can have memberships for the book club, the video club or for both clubs (premium).
 
+This is a Code Kata showcase challange that required building an webapi for exposing checkout order functionality.
+
 ## Requirements
-This is a Code Kata showcase challange that required building an webapi for exposing checkout order functionality. Some of the requirements are:
 
 ### Business requirements
 - BR1. If the purchase order contains a membership, it has to be activated in the customer account immediately.
