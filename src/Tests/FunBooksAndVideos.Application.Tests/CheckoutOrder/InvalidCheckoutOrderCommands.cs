@@ -13,6 +13,7 @@ namespace FunBooksAndVideos.Application.Tests
         private List<object[]> Data => new()
         {
             GetCommandOrderWithMoreThenOneMembership(),
+            GetCommandOrderWithSameMembershipAsCustomer()
         };
 
         public IEnumerator<object[]> GetEnumerator() => Data.GetEnumerator();
@@ -21,16 +22,42 @@ namespace FunBooksAndVideos.Application.Tests
 
         private object[] GetCommandOrderWithMoreThenOneMembership()
         {
+            var john = GetJohn();
+            var bookClub = GetBookClub();
+            var videoClub = GetVideoClub();
+
             var command = _commandBuilder
-                .ForCustomer(John)
-                .ForMembership(BookClub)
-                .ForMembership(VideoClub)
+                .ForCustomer(john)
+                .ForMembership(bookClub)
+                .ForMembership(videoClub)
                 .Build();
 
             var uow = new Mock<IUnitOfWork>();
 
-            uow.Setup(x => x.Customers.GetByIdAsync(John.Id))
-                .ReturnsAsync(John);
+            uow.Setup(x => x.Customers.GetByIdAsync(john.Id))
+                .ReturnsAsync(john);
+
+            return new object[] { command, uow.Object };
+        }
+
+        private object[] GetCommandOrderWithSameMembershipAsCustomer()
+        {
+            var john = GetJohn();
+            var bookClub = GetBookClub();
+            john.UpdateMembership(bookClub);
+
+            var command = _commandBuilder
+                .ForCustomer(john)
+                .ForMembership(bookClub)
+                .Build();
+
+            var uow = new Mock<IUnitOfWork>();
+
+            uow.Setup(x => x.Customers.GetByIdAsync(john.Id))
+                .ReturnsAsync(john);
+
+            uow.Setup(x => x.Memberships.GetByIdAsync(bookClub.Id))
+                .ReturnsAsync(bookClub);
 
             return new object[] { command, uow.Object };
         }

@@ -4,21 +4,21 @@ namespace FunBooksAndVideos.Application.Tests.Mothers
 {
     internal static class CustomersMother
     {
-        public static Customer John => new
+        public static Customer GetJohn() => new
         (
             id: Guid.NewGuid(),
             firstName: "John",
             lastName: "Doe"
         );
 
-        public static Customer Jane => new
+        public static Customer GetJane() => new
         (
             id: Guid.NewGuid(),
             firstName: "Jane",
             lastName: "Addison"
         );
 
-        public static Customer NonExistingCustomer => new
+        public static Customer GetNonExistingCustomer() => new
         (
             id: Guid.NewGuid(),
             firstName: "MyNameIs",

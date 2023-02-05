@@ -4,10 +4,10 @@ namespace FunBooksAndVideos.Application.Tests.Mothers
 {
     internal static class ProductsMother
     {
-        public static PhysicalProduct NonExistingPhysicalProduct => new
+        public static PhysicalProduct GetNonExistingPhysicalProduct() => new
         (
             id: Guid.NewGuid(),
-            name: nameof(NonExistingPhysicalProduct),
+            name: "NonExistingPhysicalProduct",
             description: "Something not worth your money",
             price: 0,
             productType: ProductType.Book,

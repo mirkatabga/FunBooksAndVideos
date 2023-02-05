@@ -28,7 +28,11 @@ namespace FunBooksAndVideos.Domain
             }
         }
 
-        public void UpdateMembership(Membership? membership) => Membership = membership;
+        public void UpdateMembership(Membership? membership)
+        {
+            MembershipId = membership?.Id;
+            Membership = membership;
+        }
 
         public void UpdateProducts(ICollection<Product> products) => Products = products;
     }

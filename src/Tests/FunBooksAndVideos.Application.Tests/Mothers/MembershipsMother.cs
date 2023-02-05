@@ -4,7 +4,7 @@ namespace FunBooksAndVideos.Application.Tests.Mothers
 {
     internal static class MembershipsMother
     {
-        public static Membership BookClub => new
+        public static Membership GetBookClub() => new
         (
             id: Guid.NewGuid(),
             name: "Book Club",
@@ -12,7 +12,7 @@ namespace FunBooksAndVideos.Application.Tests.Mothers
             price: 200
         );
 
-        public static Membership VideoClub => new
+        public static Membership GetVideoClub() => new
         (
             id: Guid.NewGuid(),
             name: "Video Club",
@@ -20,7 +20,7 @@ namespace FunBooksAndVideos.Application.Tests.Mothers
             price: 150
         );
 
-        public static Membership Premium => new
+        public static Membership GetPremium() => new
         (
             id: Guid.NewGuid(),
             name: "Premium",
@@ -28,10 +28,10 @@ namespace FunBooksAndVideos.Application.Tests.Mothers
             price: 300
         );
 
-        public static Membership NonExistingMembership => new
+        public static Membership GetNonExistingMembership() => new
         (
             id: Guid.NewGuid(),
-            name: nameof(NonExistingMembership),
+            name: "NonExistingMembership",
             description: "Non existing special offer",
             price: 0
         );

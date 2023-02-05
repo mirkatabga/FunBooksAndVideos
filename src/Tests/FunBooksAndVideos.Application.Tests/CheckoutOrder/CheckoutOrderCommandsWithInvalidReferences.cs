@@ -26,9 +26,12 @@ namespace FunBooksAndVideos.Application.Tests
 
         private object[] GetCommandOrderWithNonExistingCustomer()
         {
+            var nonExistingCustomer = GetNonExistingCustomer();
+            var bookClub = GetBookClub();
+
             var command = _commandBuilder
-                .ForCustomer(NonExistingCustomer)
-                .ForMembership(BookClub)
+                .ForCustomer(nonExistingCustomer)
+                .ForMembership(bookClub)
                 .Build();
 
             var uow = new Mock<IUnitOfWork>();
@@ -36,25 +39,28 @@ namespace FunBooksAndVideos.Application.Tests
             uow.Setup(x => x.Customers)
                 .Returns(Mock.Of<ICustomerRepository>());
 
-            uow.Setup(x => x.Memberships.GetByIdAsync(BookClub.Id))
-                .ReturnsAsync(BookClub);
+            uow.Setup(x => x.Memberships.GetByIdAsync(bookClub.Id))
+                .ReturnsAsync(bookClub);
 
             return new object[] { command, uow.Object };
         }
 
         private object[] GetCommandOrderWithNonExistingProduct()
         {
+            var jane = GetJane();
+            var nonExistingProduct = GetNonExistingPhysicalProduct();
+
             var command = _commandBuilder
-                .ForCustomer(Jane)
-                .ForPhysicalProducts(SESAME_STR, NonExistingPhysicalProduct)
+                .ForCustomer(jane)
+                .ForPhysicalProducts(SESAME_STR, nonExistingProduct)
                 .Build();
 
             var uow = new Mock<IUnitOfWork>();
 
-            uow.Setup(x => x.Customers.GetByIdAsync(Jane.Id))
-                .ReturnsAsync(Jane);
+            uow.Setup(x => x.Customers.GetByIdAsync(jane.Id))
+                .ReturnsAsync(jane);
 
-            uow.Setup(x => x.Products.GetByIds(new List<Guid> { NonExistingPhysicalProduct.Id }))
+            uow.Setup(x => x.Products.GetByIds(new List<Guid> { nonExistingProduct.Id }))
                 .Returns(new List<Product>());
 
             return new object[] { command, uow.Object };
@@ -62,9 +68,12 @@ namespace FunBooksAndVideos.Application.Tests
 
         private object[] GetCommandOrderWithNonExistingMembership()
         {
+            var john = GetJohn();
+            var nonExistingMembership = GetNonExistingMembership();
+
             var command = _commandBuilder
-                .ForCustomer(John)
-                .ForMembership(NonExistingMembership)
+                .ForCustomer(john)
+                .ForMembership(nonExistingMembership)
                 .Build();
 
             var uow = new Mock<IUnitOfWork>();
@@ -72,10 +81,10 @@ namespace FunBooksAndVideos.Application.Tests
             uow.Setup(x => x.Products.GetByIds(new List<Guid>()))
                 .Returns(new List<Product>());
 
-            uow.Setup(x => x.Customers.GetByIdAsync(John.Id))
-                .ReturnsAsync(John);
+            uow.Setup(x => x.Customers.GetByIdAsync(john.Id))
+                .ReturnsAsync(john);
 
-            uow.Setup(x => x.Memberships.GetByIdAsync(NonExistingMembership.Id))
+            uow.Setup(x => x.Memberships.GetByIdAsync(nonExistingMembership.Id))
                 .ReturnsAsync(null as Membership);
 
             return new object[] { command, uow.Object };
