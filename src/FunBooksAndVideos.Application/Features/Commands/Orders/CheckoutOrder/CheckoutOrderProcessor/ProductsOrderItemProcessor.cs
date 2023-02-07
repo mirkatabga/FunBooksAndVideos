@@ -1,5 +1,4 @@
 using FunBooksAndVideos.Application.Contracts.Persistence;
-using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
 
 namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.CheckoutOrderProcessor
@@ -13,8 +12,9 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
             _uow = unitOfWork;
         }
 
-        public async Task<ProcessOrderResponse> ProcessAsync(CheckoutOrderCommand command, ProcessOrderResponse response)
+        public async Task<ProcessOrderItemsResponse> ProcessAsync(CheckoutOrderCommand command)
         {
+            var response = new ProcessOrderItemsResponse();
             var productIds = command.GetProductIdsForOrder();
 
             if (productIds.Count == 0)
@@ -35,13 +35,9 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
                 }
 
                 var product = products.Single(p => p.Id == item.ProductId);
+                response.HasPhysicalProduct |= product is PhysicalProduct;
 
-                if (!response.HasPhysicalProduct && product is PhysicalProduct)
-                {
-                    response.HasPhysicalProduct = true;
-                }
-
-                response.Order.AddOrderItem(new OrderItem(
+                response.OrderItems.Add(new OrderItem(
                     id: Guid.NewGuid(),
                     name: product.Name,
                     membershipId: null,

@@ -1,5 +1,4 @@
 using FunBooksAndVideos.Application.Contracts.Persistence;
-using FunBooksAndVideos.Application.Models.Orders;
 using FunBooksAndVideos.Domain;
 
 namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.CheckoutOrderProcessor
@@ -14,8 +13,9 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
             _uow = unitOfWork;
         }
 
-        public async Task<ProcessOrderResponse> ProcessAsync(CheckoutOrderCommand command, ProcessOrderResponse response)
+        public async Task<ProcessOrderItemsResponse> ProcessAsync(CheckoutOrderCommand command)
         {
+            var response = new ProcessOrderItemsResponse();
             var customer = await _uow.Customers.GetByIdAsync(command.CustomerId);
             var membershipIds = command.GetMembershipsIdsForOrder();
 
@@ -28,7 +28,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
 
             customer!.UpdateMembership(membership);
 
-            response.Order.AddOrderItem(new OrderItem(
+            response.OrderItems.Add(new OrderItem(
                 id: Guid.NewGuid(),
                 name: membership!.Name,
                 membershipId: membership!.Id,

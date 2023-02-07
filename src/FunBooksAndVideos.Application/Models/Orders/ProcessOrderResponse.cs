@@ -1,3 +1,4 @@
+using FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.CheckoutOrderProcessor;
 using FunBooksAndVideos.Domain;
 
 namespace FunBooksAndVideos.Application.Models.Orders
@@ -11,6 +12,19 @@ namespace FunBooksAndVideos.Application.Models.Orders
 
         public Order Order { get; }
 
-        public bool HasPhysicalProduct { get; set; }
+        public bool HasPhysicalProduct { get; private set; }
+
+        public void AggregateItemsResponses(ICollection<ProcessOrderItemsResponse> processorsResponses)
+        {
+            foreach (var response in processorsResponses)
+            {
+                foreach (var item in response.OrderItems)
+                {
+                    Order.AddOrderItem(item);
+                }
+
+                HasPhysicalProduct |= response.HasPhysicalProduct;
+            }
+        }
     }
 }

@@ -25,13 +25,16 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
                 deliveryAddress: command.DeliveryAddress);
 
             var response = new ProcessOrderResponse(order);
+            var processorResponses = new List<ProcessOrderItemsResponse>();
 
             foreach (var processor in _processors)
             {
-                response = await processor.ProcessAsync(command, response);
+                processorResponses.Add(await processor.ProcessAsync(command));
             }
 
-            await _uow.Orders.AddAsync(order);
+            response.AggregateItemsResponses(processorResponses);
+
+            await _uow.Orders.AddAsync(response.Order);
             await _uow.SaveChangesAsync();
 
             return response;

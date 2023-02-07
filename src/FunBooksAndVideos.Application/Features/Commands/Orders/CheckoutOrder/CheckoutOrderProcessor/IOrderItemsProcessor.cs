@@ -5,6 +5,6 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
 
     public interface IOrderItemsProcessor
     {
-        Task<ProcessOrderResponse> ProcessAsync(CheckoutOrderCommand command, ProcessOrderResponse response);
+        Task<ProcessOrderItemsResponse> ProcessAsync(CheckoutOrderCommand command);
     }
 }
