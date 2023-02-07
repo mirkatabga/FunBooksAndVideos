@@ -20,7 +20,7 @@ namespace FunBooksAndVideos.Domain
         public Membership? Membership { get; private set; }
         public ICollection<Product> Products { get; private set; } = new HashSet<Product>();
 
-        public void AddProducts(List<Product> productsToAdd)
+        public void AddProducts(ICollection<Product> productsToAdd)
         {
             foreach (var product in productsToAdd)
             {

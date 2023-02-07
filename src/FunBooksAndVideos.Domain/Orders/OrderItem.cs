@@ -9,13 +9,15 @@ namespace FunBooksAndVideos.Domain
             string name,
             Guid? membershipId,
             Guid? productId,
-            int? quantity)
+            int quantity,
+            decimal price)
         {
             Id = id;
             Name = name;
             MembershipId = membershipId;
             ProductId = productId;
             Quantity = quantity;
+            Price = price;
         }
 
         public string Name { get; private set; }
@@ -25,6 +27,7 @@ namespace FunBooksAndVideos.Domain
         public Membership? Membership { get; private set; }
         public Guid? ProductId { get; private set; }
         public Product? Product { get; private set; }
-        public int? Quantity { get; private set; }
+        public int Quantity { get; private set; }
+        public decimal Price { get; private set; }
     }
 }

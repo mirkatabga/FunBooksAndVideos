@@ -11,6 +11,7 @@ using FunBooksAndVideos.Application.Features.Events.Orders;
 using Tests.FunBooksAndVideos.Application.Tests.Builders;
 using static FunBooksAndVideos.Application.Tests.Mothers.CustomersMother;
 using static FunBooksAndVideos.Application.Tests.Mothers.ProductsMother;
+using FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.CheckoutOrderProcessor;
 
 namespace FunBooksAndVideos.Application.Tests;
 
@@ -25,10 +26,10 @@ public class CheckoutOrderCommandHandlerTests
     public async Task Handle_OrderReferencingNotExistingEntities_ThrowsNotFoundException(CheckoutOrderCommand command, IUnitOfWork uow)
     {
         var handler = new CheckoutOrderCommandHandler(
-            uow,
             _mapper,
             new CheckoutOrderCommandConsistencyValidator(uow),
-            Mock.Of<IPublisher>());
+            Mock.Of<IPublisher>(),
+            new OrderProcessor(uow, GetProcessors(uow)));
 
         await handler
             .Invoking(h => h.Handle(command, CancellationToken.None))
@@ -57,10 +58,10 @@ public class CheckoutOrderCommandHandlerTests
         var uow = Mock.Of<IUnitOfWork>();
 
         var checkoutOrderCommandHandler = new CheckoutOrderCommandHandler(
-            uow,
             _mapper,
             new CheckoutOrderCommandConsistencyValidator(uow),
-            Mock.Of<IPublisher>());
+            Mock.Of<IPublisher>(),
+            new OrderProcessor(uow, GetProcessors(uow)));
 
         await validationBehavior.Invoking(x => x.Handle(
             command,
@@ -76,10 +77,10 @@ public class CheckoutOrderCommandHandlerTests
             CheckoutOrderCommand command, IUnitOfWork uow)
     {
         var handler = new CheckoutOrderCommandHandler(
-            uow,
             _mapper,
             new CheckoutOrderCommandConsistencyValidator(uow),
-            Mock.Of<IPublisher>());
+            Mock.Of<IPublisher>(),
+            new OrderProcessor(uow, GetProcessors(uow)));
 
         await handler.Invoking(h => h.Handle(command, CancellationToken.None))
             .Should()
@@ -115,10 +116,10 @@ public class CheckoutOrderCommandHandlerTests
         var publisher = new Mock<IPublisher>();
 
         var commandHandler = new CheckoutOrderCommandHandler(
-            uow.Object,
             _mapper,
             new CheckoutOrderCommandConsistencyValidator(uow.Object),
-            publisher.Object);
+            publisher.Object,
+            new OrderProcessor(uow.Object, GetProcessors(uow.Object)));
 
         var orderVm = await commandHandler.Handle(command, CancellationToken.None);
 
@@ -126,4 +127,9 @@ public class CheckoutOrderCommandHandlerTests
             expression: p => p.Publish(new PhysicalProductsOrderedEvent(orderVm.Id), It.IsAny<CancellationToken>()),
             times: Times.Once);
     }
+    private ICollection<IOrderItemsProcessor> GetProcessors(IUnitOfWork uow) => new List<IOrderItemsProcessor>
+    {
+        new MembershipOrderItemProcessor(uow),
+        new ProductsOrderItemProcessor(uow)
+    };
 }
