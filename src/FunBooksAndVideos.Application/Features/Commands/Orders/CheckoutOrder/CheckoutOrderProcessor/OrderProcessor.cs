@@ -24,7 +24,6 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
                 customerId: command.CustomerId,
                 deliveryAddress: command.DeliveryAddress);
 
-            var response = new ProcessOrderResponse(order);
             var processorResponses = new List<ProcessOrderItemsResponse>();
 
             foreach (var processor in _processors)
@@ -32,6 +31,7 @@ namespace FunBooksAndVideos.Application.Features.Commands.Orders.CheckoutOrder.C
                 processorResponses.Add(await processor.ProcessAsync(command));
             }
 
+            var response = new ProcessOrderResponse(order);
             response.AggregateItemsResponses(processorResponses);
 
             await _uow.Orders.AddAsync(response.Order);
