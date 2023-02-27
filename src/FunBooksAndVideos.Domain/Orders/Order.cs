@@ -6,12 +6,10 @@ namespace FunBooksAndVideos.Domain
     {
         public Order(
             Guid id,
-            decimal totalPrice,
             Guid customerId,
             string? deliveryAddress = null)
         {
             Id = id;
-            TotalPrice = totalPrice;
             CustomerId = customerId;
             DeliveryAddress = deliveryAddress;
         }
@@ -20,6 +18,17 @@ namespace FunBooksAndVideos.Domain
         public Guid CustomerId { get; private set; }
         public Customer? Customer { get; private set; }
         public string? DeliveryAddress { get; private set; }
-        public ICollection<OrderItem> OrderItems { get; set; } = new HashSet<OrderItem>();
+        public ICollection<OrderItem> OrderItems { get; private set; } = new HashSet<OrderItem>();
+
+        public void AddOrderItem(OrderItem orderItem)
+        {
+            if(orderItem is null)
+            {
+                throw new ArgumentNullException(nameof(orderItem));
+            }
+
+            TotalPrice += orderItem.Price * orderItem.Quantity;
+            OrderItems.Add(orderItem);
+        }
     }
 }

@@ -42,12 +42,12 @@ namespace FunBooksAndVideos.Application.Features.Events.Orders
                     shippingSlip.AddSlipItem(new ShippingSlipItem(
                         id: Guid.NewGuid(),
                         description: orderItem.Name,
-                        orderedQuantity: orderItem.Quantity!.Value,
-                        shippedQuantity: orderItem.Quantity.Value,
+                        orderedQuantity: orderItem.Quantity,
+                        shippedQuantity: orderItem.Quantity,
                         productId: orderItem.ProductId!.Value,
                         price: orderItem.Product.Price));
 
-                    physicalProduct.ReduceQuantity(orderItem.Quantity.Value);
+                    physicalProduct.ReduceQuantity(orderItem.Quantity);
                     await _uow.Products.UpdateAsync(physicalProduct);
                 }
             }
